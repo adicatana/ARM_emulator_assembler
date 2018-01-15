@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MEMORY_SIZE 65536
 #define BUFFER_SIZE 256
@@ -16,7 +17,7 @@ int main(int argc, char** argv) {
 
         FILE *f;
     
-        f = fopen(argv[0], "rb");
+        f = fopen(argv[1], "r");
 
         if (f == NULL) {
 		    fprintf(stderr, "File not found.\n");
@@ -29,11 +30,17 @@ int main(int argc, char** argv) {
 
         memory *mem = calloc(sizeof(memory), 1);
 
-        int *ptr = mem;
+        memory *ptr = mem;
 
-        while (fread(buffer, 1, BUFFER_SIZE, f)) {
+        while (fread(buffer, 1, BUFFER_SIZE, f) > 0) {
             memcpy(ptr, buffer, BUFFER_SIZE);
             ptr += BUFFER_SIZE;
+        }
+
+        int count = 0;
+        
+        while (mem->addr[count]) {
+            printf("%x\n", mem->addr[count++]);
         }
 
         fclose(f);
