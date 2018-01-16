@@ -1,6 +1,6 @@
 #include "input.h"
 
-memory *read_from_binary(char* name) {
+memory_t *read_from_binary(char* name) {
 
     FILE *f = fopen(name, "rb");
 
@@ -13,13 +13,13 @@ memory *read_from_binary(char* name) {
         
     memset(buffer, 0, BUFFER_SIZE);
 
-    memory *mem = calloc(sizeof(memory), 1);
+    memory_t *mem = calloc(sizeof(memory_t), 1);
 
 	if (mem == NULL) {
-		fprintf(stderr, "Fatal: failed to allocate %zu bytes.\n", sizeof(memory));
+		fprintf(stderr, "Fatal: failed to allocate %zu bytes.\n", sizeof(memory_t));
 	}
 
-    memory *ptr = mem;
+    memory_t *ptr = mem;
 
     while (fread(buffer, 1, BUFFER_SIZE, f) > 0) {
 
