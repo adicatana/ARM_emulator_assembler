@@ -1,20 +1,6 @@
 #include "input.h"
 #include "types.h"
-
-uint32_t fetch(memory_t* mem, uint32_t PC) {
-	if (PC < 0) {
-		return -1;
-	}
-	return mem->addr[PC];
-}
-
-uint32_t decode(uint32_t instruction) {
-	return instruction;
-}
-
-void execute(uint32_t instruction) {
-	// nothing do to yet
-}
+#include "pipeline_cycle.h"
 
 int main(int argc, char** argv) {
 
@@ -28,19 +14,17 @@ int main(int argc, char** argv) {
 			perror("Erorr reading from binary\n");
 			exit(EXIT_FAILURE);
 		}
-
-		int count = 0;
 		
 		uint32_t previous_instruction = -1;
 		uint32_t prev_instruction = -1;
-		    
+		uint32_t instruction = 4;
+
 		do {
 			
-			printf("%s\n", "Starting the cycle...");
-			
+			printf("%s%x\n", "Starting the cycle... at PC: ", registers[PC_REG]);		
 			
 			printf("%s\n", "Fetching...");			
-			uint32_t instruction = fetch(memory, registers[PC_REG]);
+			instruction = fetch(memory, registers[PC_REG]);
 			printf("%x fetched\n", instruction);
 
 			printf("%s\n", "Decoding...");
@@ -50,15 +34,14 @@ int main(int argc, char** argv) {
 			printf("%s %x\n", "Executing...", prev_instruction);			
 			execute(prev_instruction);
 			
-			prev_instruction = previous_instruction;
-			previous_instruction = decoded;
+			prev_instruction = decoded;
+			previous_instruction = instruction;
 
 			registers[PC_REG] += 4;
 			
-			printf("%s\n\n", "Cycle ended");
+			printf("%s\n\n", "Cycle ended.");
 			
-			count++;		
-		} while (memory->addr[count]);
+		} while (prev_instruction != 0);
 
 		free(memory);
 
