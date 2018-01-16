@@ -16,22 +16,22 @@ void exec_multiply(uint32_t code, memory_t *memory, uint32_t *regs) {
 	
 	printf("%s\n", "Execution of MULTIPLY done.");
 
-	multiply_instr reg = *((multiply_instr *) &code);
+	multiply_instr instr = *((multiply_instr *) &code);
 
-	if (!cond_check(reg.cond, *(uint32_t *)(regs + FLAG_REG))) {
+	if (!cond_check(instr.cond, *(uint32_t *)(regs + FLAG_REG))) {
 		return;
 	}
 
-	int accumulator = (reg.s & 1) ? reg.rn : 0;
+	int accumulator = (instr.s & 1) ? instr.rn : 0;
 
-	uint32_t rm = *(uint32_t *)(regs + reg.rm);
-	uint32_t rs = *(uint32_t *)(regs + reg.rs);
+	uint32_t rm = *(uint32_t *)(regs + instr.rm);
+	uint32_t rs = *(uint32_t *)(regs + instr.rs);
 
 	uint32_t rd = rm * rs + accumulator;
 
-	*(uint32_t *)(regs + reg.rd) = rd;
+	*(uint32_t *)(regs + instr.rd) = rd;
 
-	if (reg.s) {
+	if (instr.s) {
 		// set N, Z
 		if (rd >> 31) {
 			set_negative(regs + FLAG_REG);

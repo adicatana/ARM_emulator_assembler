@@ -37,19 +37,6 @@ instruction decode(uint32_t instr) {
 	return decoded;
 }
 
-void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
-	printf("%s\n", "Execution of DP done.");
-}
-
-void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {
-	printf("%s\n", "Execution of DT done.");
-}
-
-void exec_branch(uint32_t code, memory_t *memory, uint32_t *regs) {
-	printf("%s\n", "Execution of BRANCH done.");
-}
-
-
 void execute(instruction instr, memory_t *memory, uint32_t *regs) {
 
 	if (instr.type < 0 && instr.type > 3) {
