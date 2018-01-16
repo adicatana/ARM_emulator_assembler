@@ -6,6 +6,22 @@
 #define PC_REG 15
 #define FLAG_REG 16
 
+typedef enum {
+	DATA_PROCESSING,
+	MULTIPLY,
+	DATA_TRANSFER,
+	BRANCH,
+	HALT
+} instruction_t;
+
+
+typedef struct {
+	instruction_t type;
+	uint32_t code;
+} instruction;
+
+// The state of the ARM machine
+
 uint32_t registers[NO_OF_REGISTERS];
 
 typedef struct {

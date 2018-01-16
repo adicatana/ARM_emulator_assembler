@@ -1,13 +1,14 @@
 #ifndef __PIPELINE_CYCLE_H__
 #define __PIPELINE_CYCLE_H__
 
+#include <stdio.h>
 #include <stdint.h>
 #include "types.h"
 
-uint32_t fetch(memory_t* mem, uint32_t PC);
+uint32_t fetch(memory_t*, uint32_t);
 
-uint32_t decode(uint32_t instruction);
+instruction decode(uint32_t);
 
-void execute(uint32_t instruction);
+void execute(instruction, memory_t *, uint32_t *);
 
 #endif

@@ -2,6 +2,17 @@
 #include "types.h"
 #include "pipeline_cycle.h"
 
+char *get_type(instruction_t e) {
+	switch (e) {
+		case 0: return "DATA_PROCESSING";
+		case 1: return "MULTIPLY";
+		case 2: return "DATA_TRANSFER";
+		case 3: return "BRANCH";
+		case 4: return "HALT";
+		default: return "NOTHING";
+	}
+}
+
 int main(int argc, char** argv) {
 
     if (argc > 1) {
@@ -15,33 +26,33 @@ int main(int argc, char** argv) {
 			exit(EXIT_FAILURE);
 		}
 		
-		uint32_t previous_instruction = -1;
-		uint32_t prev_instruction = -1;
-		uint32_t instruction = 4;
+		uint32_t to_decode = -1;
+		uint32_t current_instruction = -1;		
+		instruction to_execute;
 
 		do {
 			
 			printf("%s%x\n", "Starting the cycle... at PC: ", registers[PC_REG]);		
 			
 			printf("%s\n", "Fetching...");			
-			instruction = fetch(memory, registers[PC_REG]);
-			printf("%x fetched\n", instruction);
+			current_instruction = fetch(memory, registers[PC_REG]);
+			printf("%x fetched\n", current_instruction);
 
 			printf("%s\n", "Decoding...");
-			uint32_t decoded = decode(previous_instruction);
-			printf("%x decoded\n", decoded);			
+			instruction decoded = decode(to_decode);
+			printf("%x decoded as a %s instruction\n", decoded.code, get_type(decoded.type));			
 
-			printf("%s %x\n", "Executing...", prev_instruction);			
-			execute(prev_instruction);
+			printf("%s %x\n", "Executing...", to_execute.code);			
+			execute(to_execute, memory, registers);
 			
-			prev_instruction = decoded;
-			previous_instruction = instruction;
+			to_execute = decoded;
+			to_decode = current_instruction;
 
 			registers[PC_REG] += 4;
 			
 			printf("%s\n\n", "Cycle ended.");
 			
-		} while (prev_instruction != 0);
+		} while (to_execute.type != HALT);
 
 		free(memory);
 
