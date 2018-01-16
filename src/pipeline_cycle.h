@@ -2,8 +2,8 @@
 #define __PIPELINE_CYCLE_H__
 
 #include <stdio.h>
-#include <stdint.h>
 #include "types.h"
+#include "multiply.h"
 
 uint32_t fetch(memory_t*, uint32_t);
 

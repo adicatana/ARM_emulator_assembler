@@ -41,10 +41,6 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 	printf("%s\n", "Execution of DP done.");
 }
 
-void exec_multiply(uint32_t code, memory_t *memory, uint32_t *regs) {
-	printf("%s\n", "Execution of MULTIPLY done.");
-}
-
 void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {
 	printf("%s\n", "Execution of DT done.");
 }
