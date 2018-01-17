@@ -11,19 +11,6 @@ typedef struct {
 	bit cond : 4;
 } processing_instr;
 
-uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
-	rotation %= 32;
-
-	uint64_t extended_immediate = immediate;
-	extended_immediate <<= 32;
-	extended_immediate |= immediate;
-
-	extended_immediate >>= rotation;
-
-	return (uint32_t)extended_immediate;
-
-}
-
 typedef uint32_t (*get_operation_code)(uint32_t rn, uint32_t operand);
 
 uint32_t and(uint32_t rn, uint32_t operand) {
