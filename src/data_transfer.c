@@ -23,7 +23,7 @@ void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {
 	}	
 
 	if (instr.i) {
-		// offset is a shifter register
+		// offset is a shifted register
 	} else {
 		// offset is an unsigned 12 bit immediate value
 	}

@@ -1,17 +1,17 @@
 #include "utils.h"
 
-uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
-	rotation %= 32;
+// uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
+// 	rotation %= 32;
 
-	uint64_t extended_immediate = immediate;
-	extended_immediate <<= 32;
-	extended_immediate |= immediate;
+// 	uint64_t extended_immediate = immediate;
+// 	extended_immediate <<= 32;
+// 	extended_immediate |= immediate;
 
-	extended_immediate >>= rotation;
+// 	extended_immediate >>= rotation;
 
-	return (uint32_t)extended_immediate;
+// 	return (uint32_t)extended_immediate;
 
-}
+// }
 
 uint32_t convert_endians(uint32_t word) {
 
