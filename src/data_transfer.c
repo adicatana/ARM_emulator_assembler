@@ -10,7 +10,7 @@ typedef struct {
 	bit p : 1;
 	bit i : 1;
 	bit unused_2 : 2;
-	bit cond : 4
+	bit cond : 4;
 } transfer_instr;
 
 void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {

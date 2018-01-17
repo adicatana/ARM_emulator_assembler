@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 65536
+#define NO_OF_GENERAL_REGISTERS 13
 #define NO_OF_REGISTERS 17
 #define PC_REG 15
 #define FLAG_REG 16

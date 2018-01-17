@@ -1,7 +1,7 @@
 #include "data_processing.h"
 
 typedef struct {
-	bit operand_2 : 12;
+	bit operand : 12;
 	bit rd : 4;
 	bit rn : 4;
 	bit s : 1;
@@ -10,6 +10,72 @@ typedef struct {
 	bit unused : 2;
 	bit cond : 4;
 } processing_instr;
+
+uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
+	rotation %= 32;
+
+	uint64_t extended_immediate = immediate;
+	extended_immediate <<= 32;
+	extended_immediate |= immediate;
+
+	extended_immediate >>= rotation;
+
+	return (uint32_t)extended_immediate;
+
+}
+
+typedef uint32_t (*get_operation_code)(uint32_t rn, uint32_t operand);
+
+uint32_t and(uint32_t rn, uint32_t operand) {
+	return rn & operand;
+}
+
+uint32_t eor(uint32_t rn, uint32_t operand) {
+	return rn ^ operand;
+}
+
+uint32_t sub(uint32_t rn, uint32_t operand) {
+	return rn - operand;
+}
+
+uint32_t rsb(uint32_t rn, uint32_t operand) {
+	return operand - rn;
+}
+
+uint32_t add(uint32_t rn, uint32_t operand) {
+	return rn + operand;
+}
+
+uint32_t tst(uint32_t rn, uint32_t operand) {
+	return 1;
+}
+
+uint32_t teq(uint32_t rn, uint32_t operand) {
+	return 1;
+}
+
+uint32_t cmp(uint32_t rn, uint32_t operand) {
+	return 1;
+}
+
+uint32_t orr(uint32_t rn, uint32_t operand) {
+	return rn | operand;
+}
+
+uint32_t mov(uint32_t rn, uint32_t operand) {
+	return operand;
+}
+
+uint32_t not_defined(uint32_t rn, uint32_t operand) {
+	return 0;
+}
+
+get_operation_code operation_table[16] = {
+	and, eor, sub, rsb, 	// 0000 to 0011
+	add, not_defined, not_defined, not_defined, // 0100 to 0111
+	tst, teq, cmp, not_defined, 
+	orr, mov, not_defined, not_defined  // 1100 to 1111
+};
 
 void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 	printf("%s\n", "Execution of DP done.");
@@ -23,10 +89,17 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 	uint32_t rn = *(uint32_t *)(regs + instr.rn);
 
 	if (instr.i) {
-		uint32_t immediate = (uint32_t)(instr.operand_2 & 0xFF);
-		
+		uint32_t immediate = instr.operand & 0xFF;
+		uint32_t rotation = ((instr.operand >> 8) << 2);
+
+		uint32_t operand = rotate_right(immediate, rotation);
+
+		*(regs + instr.rd) = operation_table[instr.cond & 15](rn, operand);
+
 	} else {
 
 	}
+
+
 
 }
