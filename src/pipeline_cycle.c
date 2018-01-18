@@ -26,7 +26,7 @@ instruction decode(uint32_t instr) {
 			decoded.type = BRANCH;
 		} else if (instr & DATA_TRANSFER_MASK) {
 			decoded.type = DATA_TRANSFER;
-		} else if ((instr & MULTIPLY_MASK) == MULTIPLY_MASK) {
+		} else if ((instr & MULTIPLY_MASK) == MULTIPLY_MASK && ((instr >> 22) & 0x3F == 0)) {
 			decoded.type = MULTIPLY;
 		} else {
 			decoded.type = DATA_PROCESSING;

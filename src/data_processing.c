@@ -14,6 +14,7 @@ typedef struct {
 typedef uint32_t (*get_operation_code)(uint32_t rn, uint32_t operand);
 
 uint32_t and(uint32_t rn, uint32_t operand) {
+	//printf("AND\n");
 	return rn & operand;
 }
 
@@ -50,6 +51,7 @@ uint32_t orr(uint32_t rn, uint32_t operand) {
 }
 
 uint32_t mov(uint32_t rn, uint32_t operand) {
+	//printf("MOV\n");	
 	return operand;
 }
 
@@ -65,7 +67,7 @@ get_operation_code operation_table[16] = {
 };
 
 void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
-	// printf("%s\n", "Execution of DP starting.");
+	//printf("%s\n", "Execution of DP starting.");
 
 	processing_instr instr = *((processing_instr *) &code);
 
@@ -103,6 +105,7 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 
 	}
 
+	//printf("Opcode : %d\n", instr.opcode);
 
 	*(regs + instr.rd) = operation_table[instr.opcode & 15](rn, operand);
 
@@ -111,5 +114,6 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 
 	}
 
+	//printf("Execution of DP ending\n");
 
 }

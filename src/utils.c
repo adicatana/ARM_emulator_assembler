@@ -73,7 +73,7 @@ void print_state(memory_t *mem, uint32_t *regs) {
 	for (uint32_t i = 0; i < MEMORY_SIZE; i++) {
 		uint32_t word = *(uint32_t *)&mem->addr[i];
 		if (word) {
-			printf("0x%08x: 0x%08x\n", i, convert_endians(word));
+			printf("0x%08x: 0x%08x\n", 4 * i, convert_endians(word));
 		}
 	}
 }
