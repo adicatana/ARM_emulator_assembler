@@ -14,7 +14,7 @@ typedef struct {
 
 void exec_multiply(uint32_t code, memory_t *memory, uint32_t *regs) {
 	
-	printf("%s\n", "Execution of MULTIPLY done.");
+//	printf("%s\n", "Execution of MULTIPLY done.");
 
 	multiply_instr instr = *((multiply_instr *) &code);
 

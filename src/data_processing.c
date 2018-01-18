@@ -64,42 +64,8 @@ get_operation_code operation_table[16] = {
 	orr, mov, not_defined, not_defined  // 1100 to 1111
 };
 
-typedef uint32_t (*get_shifted_value)(uint32_t reg, uint32_t amount);
-
-uint32_t logical_left(uint32_t reg, uint32_t amount) {
-	return reg << amount;
-}
-
-uint32_t logical_right(uint32_t reg, uint32_t amount) {
-	return reg >> amount;
-}
-
-uint32_t arithmetic_right(uint32_t reg, uint32_t amount) {
-	uint32_t MSB = (reg & (1 << 31));
-	uint32_t MASK = 0;
-	for (int i = 0; i < amount; i++) {
-		MASK |= (MSB >> i);
-	}
-	return logical_right(reg, amount) | MASK;
-}
-
-uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
-	rotation %= 32;
-
-	uint64_t extended_immediate = immediate;
-	extended_immediate <<= 32;
-	extended_immediate |= immediate;
-
-	extended_immediate >>= rotation;
-
-	return (uint32_t)extended_immediate;
-
-}
-
-get_shifted_value shift_table[4] = {logical_left, logical_right, arithmetic_right, rotate_right};
-
 void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
-	printf("%s\n", "Execution of DP done.");
+	// printf("%s\n", "Execution of DP starting.");
 
 	processing_instr instr = *((processing_instr *) &code);
 
@@ -130,18 +96,20 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 			amount = *(regs + rs);
 		} else {
 			// shift specified by a constant
-			amount = (shift >> 3) &0xF;
+			amount = (shift >> 3) & 0xF;
 		}
 
 		operand = shift_table[shift_type](*(regs + rm), amount);
 
 	}
 
-	*(regs + instr.rd) = operation_table[instr.cond & 15](rn, operand);
+
+	*(regs + instr.rd) = operation_table[instr.opcode & 15](rn, operand);
 
 
 	if (instr.s) {
 
 	}
+
 
 }

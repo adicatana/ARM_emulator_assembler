@@ -13,6 +13,38 @@
 
 // }
 
+uint32_t logical_left(uint32_t reg, uint32_t amount) {
+	return reg << amount;
+}
+
+uint32_t logical_right(uint32_t reg, uint32_t amount) {
+	return reg >> amount;
+}
+
+uint32_t arithmetic_right(uint32_t reg, uint32_t amount) {
+	uint32_t MSB = (reg & (1 << 31));
+	uint32_t MASK = 0;
+	for (int i = 0; i < amount; i++) {
+		MASK |= (MSB >> i);
+	}
+	return logical_right(reg, amount) | MASK;
+}
+
+uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
+	rotation %= 32;
+
+	uint64_t extended_immediate = immediate;
+	extended_immediate <<= 32;
+	extended_immediate |= immediate;
+
+	extended_immediate >>= rotation;
+
+	return (uint32_t)extended_immediate;
+
+}
+
+get_shifted_value shift_table[4] = {logical_left, logical_right, arithmetic_right, rotate_right};
+
 uint32_t convert_endians(uint32_t word) {
 
 	uint32_t converted_word = 0;

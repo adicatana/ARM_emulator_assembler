@@ -34,17 +34,17 @@ int main(int argc, char** argv) {
 
 		do {
 			
-			printf("%s%x\n", "Starting the cycle... at PC: ", registers[PC_REG]);		
+			//printf("%s%x\n", "Starting the cycle... at PC: ", registers[PC_REG]);		
 			
-			printf("%s\n", "Fetching...");			
+			//printf("%s\n", "Fetching...");			
 			current_instruction = fetch(memory, registers[PC_REG]);
-			printf("%x fetched\n", current_instruction);
+			//printf("%x fetched\n", current_instruction);
 
-			printf("%s\n", "Decoding...");
+			//printf("%s\n", "Decoding...");
 			instruction decoded = decode(to_decode);
-			printf("%x decoded as a %s instruction\n", decoded.code, get_type(decoded.type));			
+			//printf("%x decoded as a %s instruction\n", decoded.code, get_type(decoded.type));			
 
-			printf("%s %x\n", "Executing...", to_execute.code);			
+			//printf("%s %x\n", "Executing...", to_execute.code);			
 			execute(to_execute, memory, registers);
 			
 			to_execute = decoded;
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
 
 			registers[PC_REG] += 4;
 			
-			printf("%s\n\n", "Cycle ended.");
+			//printf("%s\n\n", "Cycle ended.");
 			
 		} while (to_execute.type != HALT);
 
