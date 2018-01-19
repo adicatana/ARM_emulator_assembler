@@ -38,7 +38,8 @@ int main(int argc, char** argv) {
 			log(("%s %x\n", "Executing...", to_execute.code));			
 			execute(to_execute, memory, registers);
 
-			if (to_execute.type == BRANCH) {
+			// if it is a successful branch operation, clear the instructions
+			if (to_execute.type == BRANCH && cond_check(to_execute.code >> 28, *(registers + FLAG_REG))) {
 				clear_cycle(&current_instruction, &to_decode, &to_execute);				
 			} else {			
 				to_execute = decoded;

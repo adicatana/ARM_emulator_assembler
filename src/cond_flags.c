@@ -8,6 +8,19 @@ typedef struct {
 	bit n : 1;
 } flags_t;
 
+void get_flags(const uint32_t * const reg, uint32_t * const z, uint32_t * const n, uint32_t * const c) {
+	*z = ((flags_t *)reg)->z;
+	*n = ((flags_t *)reg)->n;
+	*c = ((flags_t *)reg)->c;		
+}
+
+void set_flags(uint32_t * const reg, uint32_t z, uint32_t n, uint32_t c) {
+	flags_t *reg_flag = (flags_t *)reg;
+	reg_flag->z = z;
+	reg_flag->n = n;
+	reg_flag->c = c;
+}
+
 // set functions for negative and zero bits
 void set_negative(uint32_t * const reg, uint32_t bit) {
 	if (bit != 0 || bit != 1) {

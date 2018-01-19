@@ -43,7 +43,9 @@ void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t *
 			amount = (shift >> 3) & 0xF;
 		}
 
-		uint32_t operand = shift_table[shift_type](*(regs + rm), amount);
+		uint32_t NO_CARRY = 0;
+
+		uint32_t operand = shift_table[shift_type](*(regs + rm), amount, &NO_CARRY);
 
 		uint32_t base_reg = *(regs + instr.rn);
 

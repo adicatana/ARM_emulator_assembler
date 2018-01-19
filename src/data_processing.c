@@ -15,50 +15,71 @@ typedef struct {
 	bit cond : 4;
 } processing_instr;
 
-typedef uint32_t (*get_operation_code)(uint32_t rn, uint32_t operand);
+typedef void (*get_operation_code)(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg);
 
-uint32_t and(uint32_t rn, uint32_t operand) {
-	return rn & operand;
+void and(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn & operand;
+	*z = (res == 0);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t eor(uint32_t rn, uint32_t operand) {
-	return rn ^ operand;
+void eor(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn ^ operand;
+	*z = (res == 0);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t sub(uint32_t rn, uint32_t operand) {
-	return rn - operand;
+void sub(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn - operand;
+	*z = (res == 0);
+	*c = (~res >> 31);	
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t rsb(uint32_t rn, uint32_t operand) {
-	return operand - rn;
+void rsb(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = operand - rn;
+	*z = (res == 0);
+	*c = (res >> 31);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t add(uint32_t rn, uint32_t operand) {
-	return rn + operand;
+void add(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn + operand;
+	*z = (res == 0);
+	*c = (res >> 31);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t tst(uint32_t rn, uint32_t operand) {
-	return 1;
+void tst(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn & operand;
+	*z = (res == 0);
+	*n = (res >> 31);
 }
-
-uint32_t teq(uint32_t rn, uint32_t operand) {
-	return 1;
+void teq(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn ^ operand;
+	*z = (res == 0);
+	*n = (res >> 31);
 }
-
-uint32_t cmp(uint32_t rn, uint32_t operand) {
-	return 1;
+void cmp(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn - operand;
+	*z = (res == 0);
+	*c = ((~res) >> 31);		
+	*n = (res >> 31);
 }
-
-uint32_t orr(uint32_t rn, uint32_t operand) {
-	return rn | operand;
+void orr(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = rn | operand;
+	*z = (res == 0);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t mov(uint32_t rn, uint32_t operand) {
-	return operand;
+void mov(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	uint32_t res = operand;
+	*z = (res == 0);
+	*n = (res >> 31);
+	*reg = res;
 }
-
-uint32_t not_defined(uint32_t rn, uint32_t operand) {
-	return 0;
+void not_defined(uint32_t rn, uint32_t operand, uint32_t *z, uint32_t *n, uint32_t *c, uint32_t * const reg) {
+	*reg = 0;
 }
 
 get_operation_code operation_table[16] = {
@@ -78,13 +99,17 @@ void exec_data_processing(uint32_t code, const memory_t * const memory, uint32_t
 	}	
 
 	uint32_t rn = *(regs + instr.rn);
-	uint32_t operand;
+	uint32_t operand, z_flag, n_flag, c_flag;
+
+	get_flags(regs + FLAG_REG, &z_flag, &n_flag, &c_flag);
 
 	if (instr.i) {
 		uint32_t immediate = instr.operand & IMMEDIATE_MASK;
 		uint32_t rotation = ((instr.operand >> 8) << 1);
 
-		operand = rotate_right(immediate, rotation);
+		uint32_t SEAM_CARRY = 0;
+
+		operand = rotate_right(immediate, rotation, &SEAM_CARRY);
 
 	} else {		
 		uint32_t rm = instr.operand & RM_REG_MASK;
@@ -103,17 +128,16 @@ void exec_data_processing(uint32_t code, const memory_t * const memory, uint32_t
 			amount = (shift >> 3);
 		}
 
-		operand = shift_table[shift_type](*(regs + rm), amount);
+		operand = shift_table[shift_type](*(regs + rm), amount, &c_flag);
 
 	}
 
 	log(("%s%d\n", "Opcode: ", instr.opcode));
 
-	*(regs + instr.rd) = operation_table[instr.opcode & 15](rn, operand);
-
+	operation_table[instr.opcode & 15](rn, operand, &z_flag, &n_flag, &c_flag, regs + instr.rd);
 
 	if (instr.s) {
-
+		set_flags(regs + FLAG_REG, z_flag, n_flag, c_flag);
 	}
 
 	log(("%s\n", "Execution of DP ending."));

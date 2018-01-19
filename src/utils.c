@@ -1,32 +1,36 @@
 #include "utils.h"
 
-uint32_t logical_left(uint32_t reg, uint32_t amount) {
+uint32_t logical_left(uint32_t reg, uint32_t amount, uint32_t * const carry) {
 	log(("%s%x%s%d\n", "Logical shift left, reg 0x", reg, " and amount ", amount));
+	*carry = amount ? (((reg << (amount - 1)) >> 31) & 1) : 0;
 	return reg << amount;
 }
 
-uint32_t logical_right(uint32_t reg, uint32_t amount) {
+uint32_t logical_right(uint32_t reg, uint32_t amount, uint32_t * const carry) {
 	log(("%s%x%s%d\n", "Logical shift right, reg 0x", reg, " and amount ", amount));	
+	*carry = amount ? ((reg >> (amount - 1)) & 1) : 0;
 	return reg >> amount;
 }
 
-uint32_t arithmetic_right(uint32_t reg, uint32_t amount) {
+uint32_t arithmetic_right(uint32_t reg, uint32_t amount, uint32_t * const carry) {
 	log(("%s%x%s%d\n", "Arithmetic shift right, reg 0x", reg, " and amount ", amount));	
 	uint32_t MSB = (reg & MSB_MASK);
 	uint32_t CARRY_MASK = 0;
 	for (int i = 0; i < amount; i++) {
 		CARRY_MASK |= (MSB >> i);
 	}
-	return logical_right(reg, amount) | CARRY_MASK;
+	return logical_right(reg, amount, carry) | CARRY_MASK;
 }
 
-uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
+uint32_t rotate_right(uint32_t immediate, uint32_t rotation, uint32_t * const carry) {
 	log(("%s%x%s%d\n", "Rotate right, immediate 0x", immediate, " and rotation ", rotation));
 
 	rotation %= WORD_LENGTH;
 
 	uint64_t extended_immediate = (uint64_t) immediate << WORD_LENGTH | immediate;
 	extended_immediate >>= rotation;
+
+	*carry = rotation ? ((immediate >> (rotation - 1)) & 1) : 0;
 
 	return (uint32_t)extended_immediate;
 
