@@ -22,7 +22,7 @@ void exec_multiply(uint32_t code, const memory_t * const memory, uint32_t * cons
 		return;
 	}
 
-	int accumulator = (instr.s & 1) ? instr.rn : 0;
+	int accumulator = (instr.a & 1) ? *(regs + instr.rn) : 0;
 
 	uint32_t rm = *(regs + instr.rm);
 	uint32_t rs = *(regs + instr.rs);
