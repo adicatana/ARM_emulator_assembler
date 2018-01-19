@@ -33,14 +33,11 @@ void exec_multiply(uint32_t code, memory_t *memory, uint32_t *regs) {
 
 	if (instr.s) {
 		// set N, Z
-		if (rd >> 31) {
-			set_negative(regs + FLAG_REG);
-		} else {
-			clear_negative(regs + FLAG_REG);
-		}
+
+		set_negative(regs + FLAG_REG, (rd >> 31) != 0);
 
 		if (rd == 0) {
-			set_zero(regs + FLAG_REG);
+			set_zero(regs + FLAG_REG, 1);
 		}
 
 	}

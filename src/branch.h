@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include "types.h"
 #include "cond_flags.h"
+#include "utils.h"
 
-void exec_branch(uint32_t, memory_t *, uint32_t *);
+void exec_branch(uint32_t, const memory_t * const, uint32_t * const);
 
 #endif

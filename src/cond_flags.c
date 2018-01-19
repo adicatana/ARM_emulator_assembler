@@ -8,24 +8,24 @@ typedef struct {
 	bit n : 1;
 } flags_t;
 
+// set functions for negative and zero bits
+void set_negative(uint32_t * const reg, uint32_t bit) {
+	if (bit != 0 || bit != 1) {
+		perror("Trying to set the negative bit flag to non-binary value\n");
+	}
+	((flags_t *) reg)->n = bit;
+}
+
+void set_zero(uint32_t * const reg, uint32_t bit) {
+	if (bit != 0 || bit != 1) {
+		perror("Trying to set the zero bit flag to non-binary value\n");
+	}
+	((flags_t *) reg)->z = bit;
+}
+
 typedef boolean (*emulator_condition)(flags_t flags);
 
-void set_negative(uint32_t *reg) {
-	((flags_t *) reg)->n = 1;
-}
-
-void clear_negative(uint32_t *reg) {
-	((flags_t *) reg)->n = 0;
-}
-
-void set_zero(uint32_t *reg) {
-	((flags_t *) reg)->z = 1;
-}
-
-void clear_zero(uint32_t *reg) {
-	((flags_t *) reg)->z = 0;
-}
-
+// condition checking functions
 boolean equal(flags_t flags) {
 	return flags.z;
 }
