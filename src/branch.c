@@ -1,7 +1,7 @@
 #include "branch.h"
 
 typedef struct {
-	bit offset : 24;
+	int offset : 24;
 	bit unused_1 : 4;
 	bit cond : 4;
 } branch_instr;
