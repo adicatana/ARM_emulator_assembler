@@ -13,6 +13,7 @@ typedef uint32_t boolean;
 typedef unsigned int bit;
 
 typedef enum {
+	START,
 	DATA_PROCESSING,
 	MULTIPLY,
 	DATA_TRANSFER,

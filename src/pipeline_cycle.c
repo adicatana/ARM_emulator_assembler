@@ -22,7 +22,9 @@ instruction decode(uint32_t instr) {
 
 		decoded.code = instr;
 
-		if (instr & BRANCH_MASK) {
+		if ((instr & 0x0f000000) == 0x0f000000) {
+			decoded.type = START;
+		} else if (instr & BRANCH_MASK) {
 			decoded.type = BRANCH;
 		} else if (instr & DATA_TRANSFER_MASK) {
 			decoded.type = DATA_TRANSFER;
@@ -37,9 +39,13 @@ instruction decode(uint32_t instr) {
 	return decoded;
 }
 
+void exec_start() {
+	// printf ("%s\n", "Starting the cycle...");
+}
+
 void execute(instruction instr, memory_t *memory, uint32_t *regs) {
 
-	if (instr.type < 0 && instr.type > 3) {
+	if (instr.type < 0 && instr.type > 4) {
 		return;
 	}
 
@@ -48,6 +54,7 @@ void execute(instruction instr, memory_t *memory, uint32_t *regs) {
 		case MULTIPLY: exec_multiply(instr.code, memory, regs); return;
 		case DATA_TRANSFER: exec_data_transfer(instr.code, memory, regs); return;
 		case BRANCH: exec_branch(instr.code, memory, regs); return;
+		case START: exec_start(); return;
 		case HALT: return;
 	}
 
