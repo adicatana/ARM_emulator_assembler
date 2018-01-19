@@ -8,10 +8,10 @@
 #include "data_transfer.h"
 #include "branch.h"
 
-void clear_cycle(uint32_t *, uint32_t *, instruction *);
+void clear_cycle(uint32_t * const, uint32_t * const, instruction * const);
 
-uint32_t fetch(memory_t*, uint32_t);
+uint32_t fetch(const memory_t * const, uint32_t);
 instruction decode(uint32_t);
-void execute(instruction, memory_t *, uint32_t *);
+void execute(instruction, const memory_t * const, uint32_t * const);
 
 #endif

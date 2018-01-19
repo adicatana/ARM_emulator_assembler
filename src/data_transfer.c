@@ -1,5 +1,8 @@
 #include "data_transfer.h"
 
+#define RM_MASK 0xF
+#define SHIFT_TYPE_MASK 3
+
 typedef struct {
 	bit offset : 12;
 	bit rd : 4;
@@ -13,21 +16,21 @@ typedef struct {
 	bit cond : 4;
 } transfer_instr;
 
-void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {
-//	printf("%s\n", "Execution of DT done.");
+void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
+	log(("%s\n", "Execution of a DATA TRANSFER instruction starting."));
 
 	transfer_instr instr = *((transfer_instr *) &code);
 
-	if (!cond_check(instr.cond, *(uint32_t *)(regs + FLAG_REG))) {
+	if (!cond_check(instr.cond, *(regs + FLAG_REG))) {
 		return;
 	}	
 
 	if (instr.i) {
 		// offset is a shifted register
-		uint32_t rm = instr.offset & 0xF;
+		uint32_t rm = instr.offset & RM_MASK;
 		uint32_t shift = instr.offset >> 4;
 
-		uint32_t shift_type = (shift >> 1) & 3;
+		uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
 
 		uint32_t amount;
 
@@ -59,5 +62,7 @@ void exec_data_transfer(uint32_t code, memory_t *memory, uint32_t *regs) {
 	} else {
 		// offset is an unsigned 12 bit immediate value
 	}
+
+	log(("%s\n", "Execution of DT ending."));
 
 }

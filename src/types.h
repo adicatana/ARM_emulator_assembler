@@ -34,13 +34,10 @@ typedef struct {
 } instruction;
 
 // The state of the ARM machine
-
 uint32_t registers[NO_OF_REGISTERS];
 
 typedef struct {
-
     uint32_t addr[MEMORY_SIZE];
-
 } memory_t;
 
 #endif

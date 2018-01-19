@@ -1,6 +1,9 @@
 #include "pipeline_cycle.h"
 
-void clear_cycle(uint32_t *current_instruction, uint32_t *to_decode, instruction *to_execute) {
+#define ALL_ZEROS 0
+#define NO_OF_INSTRUCTIONS 5
+
+void clear_cycle(uint32_t * const current_instruction, uint32_t * const to_decode, instruction * const to_execute) {
 		*current_instruction = START_INSTRUCTION;		
 		*to_decode = START_INSTRUCTION;		
 		
@@ -8,7 +11,7 @@ void clear_cycle(uint32_t *current_instruction, uint32_t *to_decode, instruction
 		to_execute->code = START_INSTRUCTION;
 }
 
-uint32_t fetch(memory_t* mem, uint32_t PC) {
+uint32_t fetch(const memory_t * const mem, uint32_t PC) {
 	return *(uint32_t *)((char *)(mem->addr) + PC);
 }
 
@@ -16,9 +19,9 @@ instruction decode(uint32_t instr) {
 
 	instruction decoded;
 
-	if (instr == 0) {
+	if (instr == ALL_ZEROS) {
 		decoded.type = HALT;
-		decoded.code = 0;
+		decoded.code = ALL_ZEROS;
 	} else {
 
 		decoded.code = instr;
@@ -41,15 +44,16 @@ instruction decode(uint32_t instr) {
 }
 
 void exec_start() {
-	// printf ("%s\n", "Starting the cycle...");
+	log(("%s\n", "A START instruction (no effect on the pipeline) has been executed..."));
 }
 
-void execute(instruction instr, memory_t *memory, uint32_t *regs) {
+void execute(instruction instr, const memory_t * const memory, uint32_t * const regs) {
 
-	if (instr.type < 0 && instr.type > 4) {
+	if (instr.type < 0 && instr.type >= NO_OF_INSTRUCTIONS) {
 		return;
 	}
 
+	// TODO: remove memory where redundant i.e data processing multiply branch
 	switch (instr.type) {
 		case DATA_PROCESSING: exec_data_processing(instr.code, memory, regs); return;
 		case MULTIPLY: exec_multiply(instr.code, memory, regs); return;

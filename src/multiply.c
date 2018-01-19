@@ -12,34 +12,36 @@ typedef struct {
 	bit cond : 4;
 } multiply_instr;
 
-void exec_multiply(uint32_t code, memory_t *memory, uint32_t *regs) {
+void exec_multiply(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
 	
-//	printf("%s\n", "Execution of MULTIPLY done.");
+	log(("%s\n", "Execution of a MULTIPLY instruction is starting."));
 
 	multiply_instr instr = *((multiply_instr *) &code);
 
-	if (!cond_check(instr.cond, *(uint32_t *)(regs + FLAG_REG))) {
+	if (!cond_check(instr.cond, *(regs + FLAG_REG))) {
 		return;
 	}
 
 	int accumulator = (instr.s & 1) ? instr.rn : 0;
 
-	uint32_t rm = *(uint32_t *)(regs + instr.rm);
-	uint32_t rs = *(uint32_t *)(regs + instr.rs);
+	uint32_t rm = *(regs + instr.rm);
+	uint32_t rs = *(regs + instr.rs);
 
 	uint32_t rd = rm * rs + accumulator;
 
-	*(uint32_t *)(regs + instr.rd) = rd;
+	*(regs + instr.rd) = rd;
 
 	if (instr.s) {
 		// set N, Z
 
-		set_negative(regs + FLAG_REG, (rd >> 31) != 0);
+		set_negative(regs + FLAG_REG, (rd & MSB_MASK) != 0);
 
 		if (rd == 0) {
 			set_zero(regs + FLAG_REG, 1);
 		}
 
 	}
+
+	log(("%s\n", "Execution of a MULTIPLY instruction is ending."));
 
 }

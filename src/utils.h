@@ -32,7 +32,7 @@ extern get_shifted_value shift_table[4];
 
 uint32_t convert_endians(uint32_t);
 
-void print_state(memory_t *, uint32_t *);
+void print_state(const memory_t * const, uint32_t * const);
 
 
 #endif

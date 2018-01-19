@@ -46,7 +46,7 @@ uint32_t convert_endians(uint32_t word) {
 	return converted_word;
 }
 
-void print_state(memory_t *mem, uint32_t *regs) {
+void print_state(const memory_t * const mem, uint32_t * const regs) {
 
 	printf("%s", "Registers:\n");
 

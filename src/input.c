@@ -1,6 +1,6 @@
 #include "input.h"
 
-memory_t *read_from_binary(char* name) {
+memory_t *read_from_binary(const char * const name) {
 
     FILE *f = fopen(name, "rb");
 

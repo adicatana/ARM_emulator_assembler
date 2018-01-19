@@ -9,6 +9,6 @@
 
 #define BUFFER_SIZE 256
 
-memory_t *read_from_binary(char* name); 
+memory_t *read_from_binary(const char * const name); 
 
 #endif
