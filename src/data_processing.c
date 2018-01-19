@@ -84,7 +84,7 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 
 		operand = rotate_right(immediate, rotation);
 
-	} else {
+	} else {		
 		uint32_t rm = instr.operand & 0xF;
 		uint32_t shift = instr.operand >> 4;
 
@@ -98,7 +98,7 @@ void exec_data_processing(uint32_t code, memory_t *memory, uint32_t *regs) {
 			amount = *(regs + rs);
 		} else {
 			// shift specified by a constant
-			amount = (shift >> 3) & 0xF;
+			amount = (shift >> 3);
 		}
 
 		operand = shift_table[shift_type](*(regs + rm), amount);
