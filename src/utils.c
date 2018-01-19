@@ -31,11 +31,10 @@ uint32_t arithmetic_right(uint32_t reg, uint32_t amount) {
 }
 
 uint32_t rotate_right(uint32_t immediate, uint32_t rotation) {
+
 	rotation %= 32;
 
-	uint64_t extended_immediate = immediate;
-	extended_immediate <<= 32;
-	extended_immediate |= immediate;
+	uint64_t extended_immediate = (uint64_t) immediate << 32 | immediate;
 
 	extended_immediate >>= rotation;
 
