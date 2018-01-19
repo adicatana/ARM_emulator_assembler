@@ -1,9 +1,14 @@
 #include "pipeline_cycle.h"
 
+void clear_cycle(uint32_t *current_instruction, uint32_t *to_decode, instruction *to_execute) {
+		*current_instruction = START_INSTRUCTION;		
+		*to_decode = START_INSTRUCTION;		
+		
+		to_execute->type = START;
+		to_execute->code = START_INSTRUCTION;
+}
+
 uint32_t fetch(memory_t* mem, uint32_t PC) {
-	if (PC < 0) {
-		return -1;
-	}
 	return *(uint32_t *)((char *)(mem->addr) + PC);
 }
 
@@ -16,13 +21,9 @@ instruction decode(uint32_t instr) {
 		decoded.code = 0;
 	} else {
 
-		uint32_t BRANCH_MASK = 1 << 27;
-		uint32_t DATA_TRANSFER_MASK = 1 << 26;
-		uint32_t MULTIPLY_MASK = 9 << 4;
-
 		decoded.code = instr;
 
-		if ((instr & 0x0f000000) == 0x0f000000) {
+		if ((instr & START_MASK) == START_MASK) {
 			decoded.type = START;
 		} else if (instr & BRANCH_MASK) {
 			decoded.type = BRANCH;

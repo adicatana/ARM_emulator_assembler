@@ -4,10 +4,16 @@
 #include <stdint.h>
 
 #define MEMORY_SIZE 65536
+#define WORD_LENGTH 32
+
+// Registers related constants
 #define NO_OF_GENERAL_REGISTERS 13
 #define NO_OF_REGISTERS 17
 #define PC_REG 15
 #define FLAG_REG 16
+#define INIT_REG_VALUE 0
+
+#define START_INSTRUCTION 0x0f000000
 
 typedef uint32_t boolean;
 typedef unsigned int bit;
