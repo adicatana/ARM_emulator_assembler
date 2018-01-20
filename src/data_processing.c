@@ -85,7 +85,7 @@ get_operation_code operation_table[16] = {
 	orr, mov, not_defined, not_defined  		// 1100 to 1111
 };
 
-void exec_data_processing(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
+void exec_data_processing(uint32_t code, uint32_t * const regs) {
 	log(("%s\n", "Execution of a DATA PROCESSING instruction starting."));
 
 	processing_instr instr = *((processing_instr *) &code);

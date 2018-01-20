@@ -55,10 +55,10 @@ void execute(instruction instr, memory_t * const memory, uint32_t * const regs) 
 
 	// TODO: remove memory where redundant i.e data processing multiply branch
 	switch (instr.type) {
-		case DATA_PROCESSING: exec_data_processing(instr.code, memory, regs); return;
-		case MULTIPLY: exec_multiply(instr.code, memory, regs); return;
+		case DATA_PROCESSING: exec_data_processing(instr.code, regs); return;
+		case MULTIPLY: exec_multiply(instr.code, regs); return;
 		case DATA_TRANSFER: exec_data_transfer(instr.code, memory, regs); return;
-		case BRANCH: exec_branch(instr.code, memory, regs); return;
+		case BRANCH: exec_branch(instr.code, regs); return;
 		case START: exec_start(); return;
 		case HALT: return;
 	}

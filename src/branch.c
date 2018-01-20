@@ -7,9 +7,8 @@ typedef struct __attribute__((__packed__)) {
 } branch_instr;
 
 // code   - the branch instruction
-// memory - simulated memory for the ARM machine
 // regs   - simulated registers for the ARM machine
-void exec_branch(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
+void exec_branch(uint32_t code, uint32_t * const regs) {
 	log(("%s\n", "Execution of a BRANCH instruction starting."));
 
 	branch_instr instr = *((branch_instr *) &code);

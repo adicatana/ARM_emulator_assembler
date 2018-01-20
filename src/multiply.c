@@ -12,7 +12,7 @@ typedef struct __attribute__((__packed__)) {
 	bit cond : 4;
 } multiply_instr;
 
-void exec_multiply(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
+void exec_multiply(uint32_t code, uint32_t * const regs) {
 	
 	log(("%s\n", "Execution of a MULTIPLY instruction is starting."));
 

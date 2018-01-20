@@ -6,6 +6,6 @@
 #include "cond_flags.h"
 #include "utils.h"
 
-void exec_multiply(uint32_t, const memory_t * const, uint32_t * const);
+void exec_multiply(uint32_t, uint32_t * const);
 
 #endif
