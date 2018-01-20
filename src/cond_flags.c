@@ -1,6 +1,6 @@
 #include "cond_flags.h"
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
 	bit unused : 28;
 	bit v : 1;
 	bit c : 1;

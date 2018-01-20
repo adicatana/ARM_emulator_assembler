@@ -4,7 +4,7 @@
 #define RM_REG_MASK 0xF
 #define SHIFT_TYPE_MASK 3
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
 	bit operand : 12;
 	bit rd : 4;
 	bit rn : 4;

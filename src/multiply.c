@@ -1,6 +1,6 @@
 #include "multiply.h"
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
 	bit rm : 4;
 	bit unused_1 : 4;
 	bit rs : 4;

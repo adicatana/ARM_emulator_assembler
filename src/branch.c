@@ -1,6 +1,6 @@
 #include "branch.h"
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
 	int offset : 24;
 	bit unused_1 : 4;
 	bit cond : 4;
