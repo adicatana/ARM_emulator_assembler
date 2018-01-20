@@ -1,23 +1,34 @@
 #include "utils.h"
 
-uint32_t compute_operand(uint32_t instr_operand, const uint32_t * const regs, uint32_t * const c_flag) {
-	uint32_t rm = instr_operand & RM_REG_MASK;
-	uint32_t shift = instr_operand >> 4;
+uint32_t compute_operand(uint32_t instr_operand, boolean is_immediate, const uint32_t * const regs, uint32_t * const c_flag) {
 
-	uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
+	if (is_immediate) {
+		uint32_t immediate = instr_operand & IMMEDIATE_MASK;
+		uint32_t rotation = ((instr_operand >> 8) << 1);
 
-	uint32_t amount;
+		uint32_t SEAM_CARRY = 0;
 
-	if (shift & 1) {
-		// shift specified by a register
-		uint32_t rs = shift >> 4;
-		amount = *(regs + rs);
+		return rotate_right(immediate, rotation, &SEAM_CARRY);
+
 	} else {
-		// shift specified by a constant
-		amount = (shift >> 3);
-	}
+		uint32_t rm = instr_operand & RM_REG_MASK;
+		uint32_t shift = instr_operand >> 4;
 
-	return shift_table[shift_type](*(regs + rm), amount, c_flag);
+		uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
+
+		uint32_t amount;
+
+		if (shift & 1) {
+			// shift specified by a register
+			uint32_t rs = shift >> 4;
+			amount = *(regs + rs);
+		} else {
+			// shift specified by a constant
+			amount = (shift >> 3);
+		}
+
+		return shift_table[shift_type](*(regs + rm), amount, c_flag);
+	}
 }
 
 uint32_t logical_left(uint32_t reg, uint32_t amount, uint32_t * const carry) {

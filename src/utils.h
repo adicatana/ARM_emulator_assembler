@@ -24,7 +24,7 @@
 
 char *get_type(instruction_t);
 
-uint32_t compute_operand(uint32_t, const uint32_t * const, uint32_t *);
+uint32_t compute_operand(uint32_t, boolean, const uint32_t * const, uint32_t * const);
 
 // Bit operations
 uint32_t logical_left(uint32_t, uint32_t, uint32_t * const);

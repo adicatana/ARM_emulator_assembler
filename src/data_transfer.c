@@ -27,28 +27,24 @@ void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t *
 
 	uint32_t z_flag, n_flag, c_flag;
 
+	z_flag = n_flag = c_flag = 0;
+
 	get_flags(regs + FLAG_REG, &z_flag, &n_flag, &c_flag);	
 
-	if (instr.i) {
-		
-		uint32_t operand = compute_operand(instr.offset, regs, &c_flag);
+	uint32_t offset = compute_operand(instr.offset, !instr.i, regs, &c_flag);
 
-		uint32_t base_reg = *(regs + instr.rn);
+	uint32_t base_reg = *(regs + instr.rn);
 
-		if (instr.u) {
-			base_reg += operand;
-		} else {
-			base_reg -= operand;
-		}
-
-		if (!instr.p) {
-			uint32_t aux = base_reg;
-			base_reg = *(regs + instr.rn);
-			*(regs + instr.rn) = aux;
-		}
-
+	if (instr.u) {
+		base_reg += offset;
 	} else {
-		// offset is an unsigned 12 bit immediate offset
+		base_reg -= offset;
+	}
+
+	if (!instr.p) {
+		uint32_t aux = base_reg;
+		base_reg = *(regs + instr.rn);
+		*(regs + instr.rn) = aux;
 	}
 
 	log(("%s\n", "Execution of DT ending."));

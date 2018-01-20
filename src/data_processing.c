@@ -97,19 +97,13 @@ void exec_data_processing(uint32_t code, const memory_t * const memory, uint32_t
 	uint32_t rn = *(regs + instr.rn);
 	uint32_t operand, z_flag, n_flag, c_flag;
 
+	z_flag = n_flag = c_flag = 0;
+
 	get_flags(regs + FLAG_REG, &z_flag, &n_flag, &c_flag);
 
-	if (instr.i) {
-		uint32_t immediate = instr.operand & IMMEDIATE_MASK;
-		uint32_t rotation = ((instr.operand >> 8) << 1);
 
-		uint32_t SEAM_CARRY = 0;
+	operand = compute_operand(instr.operand, instr.i, regs, &c_flag);		
 
-		operand = rotate_right(immediate, rotation, &SEAM_CARRY);
-
-	} else {
-		operand = compute_operand(instr.operand, regs, &c_flag);		
-	}
 
 	log(("%s%d\n", "Opcode: ", instr.opcode));
 
