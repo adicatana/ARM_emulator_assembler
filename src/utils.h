@@ -18,7 +18,13 @@
 #define MULTIPLY_MASK (9 << 4)
 #define START_MASK START_INSTRUCTION
 
+#define IMMEDIATE_MASK 0xFF
+#define RM_REG_MASK 0xF
+#define SHIFT_TYPE_MASK 3
+
 char *get_type(instruction_t);
+
+uint32_t compute_operand(uint32_t, const uint32_t * const, uint32_t *);
 
 // Bit operations
 uint32_t logical_left(uint32_t, uint32_t, uint32_t * const);

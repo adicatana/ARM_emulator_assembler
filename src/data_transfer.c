@@ -25,27 +25,13 @@ void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t *
 		return;
 	}	
 
+	uint32_t z_flag, n_flag, c_flag;
+
+	get_flags(regs + FLAG_REG, &z_flag, &n_flag, &c_flag);	
+
 	if (instr.i) {
-		// offset is a shifted register
-		uint32_t rm = instr.offset & RM_MASK;
-		uint32_t shift = instr.offset >> 4;
-
-		uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
-
-		uint32_t amount;
-
-		if (shift & 1) {
-			// shift specified by a register
-			uint32_t rs = shift >> 4;
-			amount = *(regs + rs);
-		} else {
-			// shift specified by a constant
-			amount = (shift >> 3) & 0xF;
-		}
-
-		uint32_t NO_CARRY = 0;
-
-		uint32_t operand = shift_table[shift_type](*(regs + rm), amount, &NO_CARRY);
+		
+		uint32_t operand = compute_operand(instr.offset, regs, &c_flag);
 
 		uint32_t base_reg = *(regs + instr.rn);
 
@@ -62,7 +48,7 @@ void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t *
 		}
 
 	} else {
-		// offset is an unsigned 12 bit immediate value
+		// offset is an unsigned 12 bit immediate offset
 	}
 
 	log(("%s\n", "Execution of DT ending."));

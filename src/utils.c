@@ -1,5 +1,25 @@
 #include "utils.h"
 
+uint32_t compute_operand(uint32_t instr_operand, const uint32_t * const regs, uint32_t * const c_flag) {
+	uint32_t rm = instr_operand & RM_REG_MASK;
+	uint32_t shift = instr_operand >> 4;
+
+	uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
+
+	uint32_t amount;
+
+	if (shift & 1) {
+		// shift specified by a register
+		uint32_t rs = shift >> 4;
+		amount = *(regs + rs);
+	} else {
+		// shift specified by a constant
+		amount = (shift >> 3);
+	}
+
+	return shift_table[shift_type](*(regs + rm), amount, c_flag);
+}
+
 uint32_t logical_left(uint32_t reg, uint32_t amount, uint32_t * const carry) {
 	log(("%s%x%s%d\n", "Logical shift left, reg 0x", reg, " and amount ", amount));
 	*carry = amount ? (((reg << (amount - 1)) >> 31) & 1) : 0;

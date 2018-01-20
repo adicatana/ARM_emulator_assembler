@@ -1,9 +1,5 @@
 #include "data_processing.h"
 
-#define IMMEDIATE_MASK 0xFF
-#define RM_REG_MASK 0xF
-#define SHIFT_TYPE_MASK 3
-
 typedef struct __attribute__((__packed__)) {
 	bit operand : 12;
 	bit rd : 4;
@@ -111,25 +107,8 @@ void exec_data_processing(uint32_t code, const memory_t * const memory, uint32_t
 
 		operand = rotate_right(immediate, rotation, &SEAM_CARRY);
 
-	} else {		
-		uint32_t rm = instr.operand & RM_REG_MASK;
-		uint32_t shift = instr.operand >> 4;
-
-		uint32_t shift_type = (shift >> 1) & SHIFT_TYPE_MASK;
-
-		uint32_t amount;
-
-		if (shift & 1) {
-			// shift specified by a register
-			uint32_t rs = shift >> 4;
-			amount = *(regs + rs);
-		} else {
-			// shift specified by a constant
-			amount = (shift >> 3);
-		}
-
-		operand = shift_table[shift_type](*(regs + rm), amount, &c_flag);
-
+	} else {
+		operand = compute_operand(instr.operand, regs, &c_flag);		
 	}
 
 	log(("%s%d\n", "Opcode: ", instr.opcode));
