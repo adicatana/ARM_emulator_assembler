@@ -16,7 +16,7 @@ typedef struct __attribute__((__packed__)) {
 	bit cond : 4;
 } transfer_instr;
 
-void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t * const regs) {
+void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const regs) {
 	log(("%s\n", "Execution of a DATA TRANSFER instruction starting."));
 
 	transfer_instr instr = *((transfer_instr *) &code);
@@ -46,6 +46,13 @@ void exec_data_transfer(uint32_t code, const memory_t * const memory, uint32_t *
 		base_reg = *(regs + instr.rn);
 		*(regs + instr.rn) = aux;
 	}
+
+	if (instr.l) {
+		regs[instr.rd] = memory->addr[offset];
+	} else {
+		memory->addr[offset] = regs[instr.rd];
+	}
+
 
 	log(("%s\n", "Execution of DT ending."));
 

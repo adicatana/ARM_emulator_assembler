@@ -6,6 +6,6 @@
 #include "cond_flags.h"
 #include "utils.h"
 
-void exec_data_transfer(uint32_t, const memory_t * const, uint32_t * const);
+void exec_data_transfer(uint32_t, memory_t * const, uint32_t * const);
 
 #endif

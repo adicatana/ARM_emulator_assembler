@@ -47,7 +47,7 @@ void exec_start() {
 	log(("%s\n", "A START instruction (no effect on the pipeline) has been executed..."));
 }
 
-void execute(instruction instr, const memory_t * const memory, uint32_t * const regs) {
+void execute(instruction instr, memory_t * const memory, uint32_t * const regs) {
 
 	if (instr.type < 0 && instr.type >= NO_OF_INSTRUCTIONS) {
 		return;
