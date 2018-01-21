@@ -33,6 +33,8 @@ void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const
 
 	uint32_t offset = compute_operand(instr.offset, !instr.i, regs, &c_flag);
 
+	set_flags(regs + FLAG_REG, z_flag, n_flag, c_flag);
+
 	uint32_t base_reg = *(regs + instr.rn);
 
 	if (instr.u) {
@@ -47,10 +49,17 @@ void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const
 		*(regs + instr.rn) = aux;
 	}
 
+	if (base_reg > MEMORY_SIZE) {
+
+		printf("Error: Out of bounds memory access at address 0x%08x\n", base_reg);
+		return;
+
+	}
+
 	if (instr.l) {
-		regs[instr.rd] = memory->addr[offset];
+		regs[instr.rd] = *(uint32_t *)((char *)(memory->addr) + base_reg);
 	} else {
-		memory->addr[offset] = regs[instr.rd];
+		*(uint32_t *)((char *)(memory->addr) + base_reg) = regs[instr.rd];
 	}
 
 
