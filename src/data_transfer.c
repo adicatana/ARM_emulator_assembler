@@ -25,15 +25,10 @@ void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const
 		return;
 	}	
 
-	uint32_t z_flag, n_flag, c_flag;
+	// data transfer will not modify carry flags
+	uint32_t SEAM_C_FLAG = 0;
 
-	z_flag = n_flag = c_flag = 0;
-
-	get_flags(regs + FLAG_REG, &z_flag, &n_flag, &c_flag);	
-
-	uint32_t offset = compute_operand(instr.offset, !instr.i, regs, &c_flag);
-
-	set_flags(regs + FLAG_REG, z_flag, n_flag, c_flag);
+	uint32_t offset = compute_operand(instr.offset, !instr.i, regs, &SEAM_C_FLAG);
 
 	uint32_t base_reg = *(regs + instr.rn);
 
