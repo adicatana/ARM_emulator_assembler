@@ -127,12 +127,12 @@ uint32_t assemble_dp(char * const instruction) {
 
     instr.cond = 0xE;
 
-    char *token = strtok(instruction, " ");
+    char *type = strtok(instruction, " ");
 
-    if (!strcmp(token, "and") || !strcmp(token, "eor")
-        || !strcmp(token, "sub") || !strcmp(token, "rsb")
-        || !strcmp(token, "add") || !strcmp(token, "orr")) {
-    } else if (!strcmp(token, "mov")) {
+    if (!strcmp(type, "and") || !strcmp(type, "eor")
+        || !strcmp(type, "sub") || !strcmp(type, "rsb")
+        || !strcmp(type, "add") || !strcmp(type, "orr")) {
+    } else if (!strcmp(type, "mov")) {
 
         instr.opcode = 13;
 

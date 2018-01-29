@@ -2,6 +2,9 @@
 #define __MULTIPLY_H__
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "types.h"
 #include "cond_flags.h"
 #include "utils.h"
@@ -10,8 +13,6 @@
 
 void exec_multiply(uint32_t, uint32_t * const);
 
-typedef uint32_t (*mult_table)(char * const instruction);
-
-mult_table assemble_mult[NO_MULT_INSTR];
+uint32_t assemble_mult(char * const);
 
 #endif

@@ -46,11 +46,47 @@ void exec_multiply(uint32_t code, uint32_t * const regs) {
 
 }
 
-static uint32_t adi(char * const instruction) {
-	printf("?\n");
-	return 0;
-}
+uint32_t assemble_mult(char * const instruction) {
 
-mult_table assemble_mult[NO_MULT_INSTR] = {
-	adi, adi
-};
+    log(("%s%s\n", "Assembling a MULTIPLY instruction: ", instruction));
+
+	multiply_instr instr;
+
+	memset(&instr, 0, sizeof(instr));
+
+	instr.cond = 14;
+	instr.unused_1 = 9;
+
+    char *type = strtok(instruction, " ");	
+
+	char *rd = strtok(NULL, ", ");
+	char *rm = strtok(NULL, ", ");
+	char *rs = strtok(NULL, ", ");				
+
+	instr.rd = atoi(++rd);
+	instr.rm = atoi(++rm);
+	instr.rs = atoi(++rs);		
+
+	log(("rd : %d\n", instr.rd));
+	log(("rm : %d\n", instr.rm));
+	log(("rs : %d\n", instr.rs));
+
+
+	if (!strcmp(type, "mul")) {
+
+		instr.a = 0;
+
+	} else if (!strcmp(type, "mla")) {
+
+		instr.a = 1;
+
+		char *rn = strtok(NULL, ", ");
+		instr.rn = atoi(++rn);
+		log(("rn : %d\n", instr.rn));		
+
+
+
+	} 
+
+	return *((uint32_t *)&instr);
+}

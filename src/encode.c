@@ -34,7 +34,7 @@ uint32_t assemble(char * const instruction) {
 
 	for (int i = 0; i < NO_MULT_INSTR; i++) {
 		if (!strcmp(mult_instr[i], type)) {			
-			return assemble_mult[i](instr_copy);
+			return assemble_mult(instr_copy);
 		}
 	}
 
