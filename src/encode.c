@@ -19,9 +19,9 @@ const char* b_instr[NO_B_INSTR] = {
 uint32_t assemble(char * const instruction) {
 	log(("%s\n", instruction));
 
-	char instr_copy[511];
+	char instr_copy[BUFFER_SIZE_ASSEMBLER - 1];
 
-	strncpy(instr_copy, instruction, 511);
+	strncpy(instr_copy, instruction, BUFFER_SIZE_ASSEMBLER - 1);
 
 	char *type = strtok(instruction, " ");
 	log(("%s%s\n", "The command is ", type));

@@ -22,6 +22,8 @@
 #define RM_REG_MASK 0xF
 #define SHIFT_TYPE_MASK 3
 
+#define BUFFER_SIZE_ASSEMBLER 512
+
 char *get_type(instruction_t);
 
 uint32_t compute_operand(uint32_t, boolean, const uint32_t * const, uint32_t * const);

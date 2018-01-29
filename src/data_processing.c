@@ -170,6 +170,14 @@ uint32_t assemble_dp(char * const instruction) {
 
     char *type = strtok(instruction, " ");
 
+    char *destination_reg = strtok(NULL, ",");
+    log(("destination_reg: %s\n", destination_reg));
+
+    destination_reg++;
+    instr.rd = atoi(destination_reg);
+    log(("destination reg number: %d\n", instr.rd));
+
+
     if (!strcmp(type, "and") || !strcmp(type, "eor")
         || !strcmp(type, "sub") || !strcmp(type, "rsb")
         || !strcmp(type, "add") || !strcmp(type, "orr")) {
@@ -189,13 +197,6 @@ uint32_t assemble_dp(char * const instruction) {
             instr.opcode = 12;
         }
 
-        char *destination_reg = strtok(NULL, ",");
-        log(("destination_reg: %s\n", destination_reg));
-
-        destination_reg++;
-        instr.rd = atoi(destination_reg);
-        log(("destination reg number: %d\n", instr.rd));
-
         char *rn = strtok(NULL, ", ");
 
         instr.rn = atoi(++rn);
@@ -207,13 +208,6 @@ uint32_t assemble_dp(char * const instruction) {
 
     } else {
 
-        char *destination_reg = strtok(NULL, ",");
-        log(("destination_reg: %s\n", destination_reg));
-
-        destination_reg++;
-        instr.rd = atoi(destination_reg);
-        log(("destination reg number: %d\n", instr.rd));
-
         char *expression = strtok(NULL, " ,#");
         log(("expression: %s\n", expression));
 
@@ -224,6 +218,7 @@ uint32_t assemble_dp(char * const instruction) {
             
         } else {
 
+            // these instructions do not modify rd, but rn
             int aux = instr.rn; 
             instr.rn = instr.rd;
             instr.rd = aux;
