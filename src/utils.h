@@ -40,5 +40,8 @@ uint32_t convert_endians(uint32_t);
 
 void print_state(const memory_t * const, uint32_t * const);
 
+uint32_t revert_number(uint32_t);
+
+void print_binary(uint32_t);
 
 #endif

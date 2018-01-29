@@ -133,16 +133,49 @@ uint32_t assemble_dp(char * const instruction) {
         || !strcmp(token, "sub") || !strcmp(token, "rsb")
         || !strcmp(token, "add") || !strcmp(token, "orr")) {
     } else if (!strcmp(token, "mov")) {
-        char *destination_reg = strtok(NULL, ",");
-        log(("destination_reg: %s\n", destination_reg));
-        char *expression = strtok(NULL, "#");
-        log(("expression: %s\n", expression));
 
         instr.i = 1;
-
         instr.opcode = 13;
 
-        int immediate = atoi(expression);
+        char *destination_reg = strtok(NULL, ",");
+        log(("destination_reg: %s\n", destination_reg));
+
+        destination_reg++;
+        instr.rd = atoi(destination_reg);
+        log(("destination reg number: %d\n", instr.rd));
+
+        char *expression = strtok(NULL, " #");
+        log(("expression: %s\n", expression));
+
+        uint32_t immediate;
+
+        if (strlen(expression) >= 2 && expression[1] == 'x') {
+            sscanf(expression, "%x", &immediate);
+        } else {
+            immediate = atoi(expression);
+        }
+
+        log(("immediate value is %d\n", immediate));
+
+        uint32_t operand = immediate;
+
+        uint32_t count = 0;
+
+        uint32_t SEAM_CARRY = 0;
+
+        // NOT SURE YET
+        while ((operand & 0xFF) != operand) {
+            operand = revert_number(immediate);
+            count++;
+            operand = rotate_right(operand, 2 * count, &SEAM_CARRY);
+            operand = revert_number(operand);
+            SEAM_CARRY = 0;
+        }
+
+        log(("Operand %d\n", operand));
+        log(("COUNT : %d\n", count));
+
+        instr.operand = (count << 8) | operand;
 
 
     } else {

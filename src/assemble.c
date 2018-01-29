@@ -14,29 +14,33 @@ int main(int argc, char** argv) {
 
         if (fin == NULL) {
             fprintf(stderr, "File not found.\n");
-            return -1;
+            return EXIT_FAILURE;
         }
 
         char *lineptr = calloc(BUFFER_SIZE + 1, 1);
 
         FILE *fout = fopen(argv[2], "wb");
 
+        if (fout == NULL) {
+            fprintf(stderr, "File not found.\n");
+            return EXIT_FAILURE;
+        }
+
         while (fgets(lineptr, BUFFER_SIZE, fin)) {
             lineptr[strlen(lineptr) - 1] = '\0';
             uint32_t instruction = assemble(lineptr);
            
-            instruction = convert_endians(instruction);
-
             fwrite(&instruction, 1, 4, fout);
 
-            printf("0x%x\n", instruction);
+            log(("%x\n", instruction));
         }        
 
-        return 0;
+        return EXIT_SUCCESS;
 
     } else {
         
-        return -1;
+        perror("No enough arguments.\n");
+        return EXIT_FAILURE;
     }
 
 }

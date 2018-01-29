@@ -113,3 +113,36 @@ char *get_type(instruction_t e) {
 		default: return "UNDEFINED";
 	}
 }
+
+uint32_t revert_number(uint32_t number) {
+
+    int bit_count = 0;
+
+    while (bit_count < 16) {
+        int bit_left = (number & (1 << bit_count)) != 0;
+        int bit_right = (number & (1 << (31 - bit_count))) != 0;
+
+        number &= ~(1 << bit_count);
+        number &= ~(1 << (31 - bit_count));
+
+        number |= (bit_left << (31 - bit_count));
+        number |= (bit_right << bit_count);
+
+        bit_count++;
+
+    }
+
+    return number;
+
+}
+
+void print_binary(uint32_t number) {
+    int count = 31;
+
+    while (count > -1) {
+        log(("%d", (number & (1 << count)) != 0));
+        count--;
+    }
+
+    log(("\n"));
+}
