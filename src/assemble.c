@@ -4,6 +4,8 @@
 #include "utils.h"
 #include "encode.h"
 
+#define BUFFER_SIZE 511
+
 int main(int argc, char** argv) {
 
     if (argc > 2) {
@@ -15,14 +17,21 @@ int main(int argc, char** argv) {
             return -1;
         }
 
-        char *lineptr = (char *)calloc(512, 1);
-
-        while (fgets(lineptr, 511, fin)) {
-            lineptr[strlen(lineptr) - 1] = '\0';
-            execute(lineptr);
-        }        
+        char *lineptr = calloc(BUFFER_SIZE + 1, 1);
 
         FILE *fout = fopen(argv[2], "wb");
+
+        while (fgets(lineptr, BUFFER_SIZE, fin)) {
+            lineptr[strlen(lineptr) - 1] = '\0';
+            uint32_t instruction = assemble(lineptr);
+           
+            instruction = convert_endians(instruction);
+
+            fwrite(&instruction, 1, 4, fout);
+
+            printf("0x%x\n", instruction);
+        }        
+
         return 0;
 
     } else {

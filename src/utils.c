@@ -67,7 +67,7 @@ uint32_t rotate_right(uint32_t immediate, uint32_t rotation, uint32_t * const ca
 
 }
 
-get_shifted_value shift_table[4] = {logical_left, logical_right, arithmetic_right, rotate_right};
+const get_shifted_value shift_table[4] = {logical_left, logical_right, arithmetic_right, rotate_right};
 
 uint32_t convert_endians(uint32_t word) {
 

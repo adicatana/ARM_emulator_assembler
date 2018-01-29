@@ -34,7 +34,7 @@ uint32_t rotate_right(uint32_t, uint32_t, uint32_t * const);
 
 typedef uint32_t (*get_shifted_value)(uint32_t reg, uint32_t amoun, uint32_t * const carry);
 
-extern get_shifted_value shift_table[4];
+extern const get_shifted_value shift_table[4];
 
 uint32_t convert_endians(uint32_t);
 

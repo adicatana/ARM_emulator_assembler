@@ -71,7 +71,7 @@ boolean undefined(flags_t flags) {
 	return 0;
 }
 
-emulator_condition condition_table[16] = {
+const emulator_condition condition_table[16] = {
 	equal, not_equal, undefined, undefined, 	// 0000 to 0011
 	undefined, undefined, undefined, undefined, // 0100 to 0111
 	undefined, undefined, greater_equal, less,  // 1000 to 1011

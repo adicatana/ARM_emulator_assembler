@@ -45,3 +45,12 @@ void exec_multiply(uint32_t code, uint32_t * const regs) {
 	log(("%s\n", "Execution of a MULTIPLY instruction is ending."));
 
 }
+
+static uint32_t adi(char * const instruction) {
+	printf("?\n");
+	return 0;
+}
+
+mult_table assemble_mult[NO_MULT_INSTR] = {
+	adi, adi
+};

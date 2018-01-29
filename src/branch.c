@@ -29,3 +29,8 @@ void exec_branch(uint32_t code, uint32_t * const regs) {
 	log(("%s%d\n", "PC after branch will be ", *(regs + PC_REG)));
 
 }
+
+uint32_t assemble_branch(char * const instruction) {
+	log(("%s%s\n", "Assembling a BRANCH instruction: ", instruction));
+	return 0;
+}

@@ -61,3 +61,12 @@ void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const
 	log(("%s\n", "Execution of DT ending."));
 
 }
+
+static uint32_t adi(char * const instruction) {
+	printf("?\n");
+	return 0;
+}
+
+sdt_table assemble_sdt[NO_SDT_INSTR] = {
+	adi, adi
+};
