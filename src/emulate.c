@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
         memory_t *memory = read_from_binary(argv[1]);
 
         if (memory == NULL) {
-            perror("Erorr reading from binary\n");
+            perror("Erorr reading from binary.\n");
             exit(EXIT_FAILURE);
         }
 
@@ -55,12 +55,12 @@ int main(int argc, char** argv) {
 
         free(memory);
 
-        return 0;
+        return EXIT_SUCCESS;
     
     } else {
 
         perror("No input file given.\n");   
-        return -1;
+        return EXIT_FAILURE;
     
     }
 

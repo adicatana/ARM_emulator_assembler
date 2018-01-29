@@ -13,7 +13,7 @@ memory_t *read_from_binary(const char * const name) {
         
     memset(buffer, 0, BUFFER_SIZE);
 
-    memory_t *mem = (memory_t *)calloc(sizeof(memory_t), 1);
+    memory_t *mem = calloc(sizeof(memory_t), 1);
 
 	if (mem == NULL) {
 		fprintf(stderr, "Fatal: failed to allocate %zu bytes.\n", sizeof(memory_t));
@@ -24,7 +24,10 @@ memory_t *read_from_binary(const char * const name) {
     while (fread(buffer, 1, BUFFER_SIZE, f) > 0) {
 
 		if (ferror(f)){
+            free(mem);
+            mem = NULL;
 			perror("Error reading from stream.\n");
+            break;
 		}
 		
         memcpy(ptr, buffer, BUFFER_SIZE);

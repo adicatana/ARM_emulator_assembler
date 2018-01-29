@@ -24,14 +24,14 @@ void set_flags(uint32_t * const reg, uint32_t z, uint32_t n, uint32_t c) {
 // set functions for negative and zero bits
 void set_negative(uint32_t * const reg, uint32_t bit) {
 	if (bit != 0 || bit != 1) {
-		perror("Trying to set the negative bit flag to non-binary value\n");
+		perror("Trying to set the negative bit flag to non-binary value.\n");
 	}
 	((flags_t *) reg)->n = bit;
 }
 
 void set_zero(uint32_t * const reg, uint32_t bit) {
 	if (bit != 0 || bit != 1) {
-		perror("Trying to set the zero bit flag to non-binary value\n");
+		perror("Trying to set the zero bit flag to non-binary value.\n");
 	}
 	((flags_t *) reg)->z = bit;
 }
