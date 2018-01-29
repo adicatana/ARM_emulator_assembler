@@ -4,7 +4,6 @@
 // need an array of linked lists
 map *initialize_map() {
     map *hm = malloc(sizeof(map));
-
     if (!hm) {
         return NULL;
     }
@@ -12,17 +11,26 @@ map *initialize_map() {
     for (int i = 0; i < NUMBER_OF_BUCKETS; i++) {
         hm->buckets[i] = NULL;
     }
-
     return hm;
 }
 
+// Hash value for every string
 int hash_code(const char * const key) {
     if (!key) {
         return 0;
     }
-    return (strlen(key) * 7 + *key * 3 + *(key + 1) * 2) % NUMBER_OF_BUCKETS;
+
+    int lim = strlen(key);
+    int hash_value = 0;
+
+    for (int i = 0; i < lim; i++) {
+        hash_value = ((long long) hash_value * base + key[i]) % NUMBER_OF_BUCKETS;
+    }
+
+    return hash_value;
 }
 
+// Node creation & alloc
 struct node *alloc_node(char * const key, int value) {
     struct node *new_node = malloc(sizeof(struct node));
 
@@ -33,8 +41,12 @@ struct node *alloc_node(char * const key, int value) {
     new_node->key = key;
     new_node->value = value;
     new_node->next = NULL;
+
+    return new_node;
+
 }
 
+// Insertion into hm of value at key
 void insert(char * const key, int value, map * const hm) {
 
     int hash = hash_code(key);
@@ -61,10 +73,10 @@ void insert(char * const key, int value, map * const hm) {
 
 }
 
+// Get key value from hm, error if no such key
 int get(char * const key, const map * const hm) {
-    int hash = hash_code(key);
-
-    struct node *root = hm->buckets[hash];
+    int hash_value = hash_code(key);
+    struct node *root = hm->buckets[hash_value];
 
     while (root) {
         if (!strcmp(root->key, key)) {
@@ -73,26 +85,25 @@ int get(char * const key, const map * const hm) {
         root = root->next;
     }
 
-    perror("No pair for key/value found in hashmap\n");
+    perror("No pair for key/value found in hashmap.\n");
 
     return 0;
 
 }
 
-void destroy_map(map * const hm) {
+// Freeing all the memory
+void destroy_map(map *hm) {
     for (int i = 0; i < NUMBER_OF_BUCKETS; i++) {
         if (hm->buckets[i]) {
-
             struct node *root = hm->buckets[i];
-
             while (root) {
                 struct node *curr = root;
                 root = root->next;
                 free(curr);
+                curr = NULL;
             }
-
         }
     }
-
     free(hm);
+    hm = NULL;
 }    

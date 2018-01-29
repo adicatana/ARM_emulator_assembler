@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#define NUMBER_OF_BUCKETS 100
-
+#define base 997
+#define NUMBER_OF_BUCKETS 666013
 
 struct node {
     char *key;
