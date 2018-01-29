@@ -62,11 +62,59 @@ void exec_data_transfer(uint32_t code, memory_t * const memory, uint32_t * const
 
 }
 
-static uint32_t adi(char * const instruction) {
-	printf("?\n");
-	return 0;
-}
+uint32_t assemble_sdt(char * const instruction) {
 
-sdt_table assemble_sdt[NO_SDT_INSTR] = {
-	adi, adi
-};
+    log(("%s%s\n", "Assembling a SGT instruction: ", instruction));
+
+    transfer_instr instr;
+
+    memset(&instr, 0, sizeof(instr));
+
+    instr.cond = 0xE;
+    instr.unused_2 = 1;
+
+    char instr_copy[BUFFER_SIZE_ASSEMBLER];
+
+    strncpy(instr_copy, instruction, BUFFER_SIZE_ASSEMBLER);
+
+    char *type = strtok(instruction, " ");
+
+    char *destination_reg = strtok(NULL, ",");
+    log(("destination_reg: %s\n", destination_reg));
+
+    destination_reg++;
+    instr.rd = atoi(destination_reg);
+    log(("destination reg number: %d\n", instr.rd));
+
+    if (!strcmp(type, "ldr")) {
+    	instr.l = 1;
+
+        char *expression = strtok(NULL, " ,#");
+        log(("expression: %s\n", expression)); 	
+
+        if (expression[0] == '=') {
+        	instr.p = 1;
+        	expression++;
+	        log(("expression: %s\n", expression));
+
+	        uint32_t immediate;
+
+	        sscanf(expression, "%x", &immediate);
+
+	        if (immediate <= 0xFF) {
+	        	instr_copy[0] = 'm';
+	        	instr_copy[1] = 'o';
+	        	instr_copy[2] = 'v';
+	        	return assemble_dp(instr_copy);
+	        } else {
+
+	        }
+
+        }
+
+    } else {
+
+    }
+
+	return *((uint32_t *)&instr);
+}

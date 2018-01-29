@@ -40,7 +40,7 @@ uint32_t assemble(char * const instruction) {
 
 	for (int i = 0; i < NO_SDT_INSTR; i++) {
 		if (!strcmp(sdt_instr[i], type)) {
-			return assemble_sdt[i](instr_copy);
+			return assemble_sdt(instr_copy);
 		}
 	}
 
